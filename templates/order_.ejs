@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en"
+	style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-family: sans-serif;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-size: 10px;-webkit-tap-highlight-color: rgba(0,0,0,0);">
+
+<head style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+	<meta charset="UTF-8" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"
+		style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge"
+		style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+	<title style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+		style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+	<style style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+		.btn-wrapper {
+			padding: 1em 0;
+			display: flex;
+		}
+
+		.btn {
+			margin: auto;
+			border: 5px solid white;
+			padding: 1em 2em;
+			color: white;
+		}
+
+		.logo {
+			object-fit: cover;
+			height: 98px;
+			width: 256px;
+		}
+
+		.action-area-success {
+			background-color: rgb(53, 189, 242);
+			border-radius: 1em;
+			width: 100%;
+			height: 200px;
+			padding: 1em 0;
+			color: white;
+		}
+
+		.order-img {
+			height: 275px;
+			width: auto;
+			object-fit: cover;
+			margin: 0.5em;
+		}
+
+		.track {
+			margin-top: 2em;
+		}
+
+		.head {
+			margin-bottom: 1.5em;
+		}
+
+		.order-item {
+			margin-bottom: 2em;
+		}
+
+		.delivery-details,
+		.payment-details {
+			margin: 3em auto
+		}
+
+		.contact {
+			margin: 3em auto
+		}
+	</style>
+</head>
+
+<body
+	style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 0;font-family: Helvetica,Arial,sans-serif;font-size: 14px;line-height: 1.42857143;color: #333;background-color: #fff;">
+	<div class="container"
+		style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding-right: 15px;padding-left: 15px;margin-right: auto;margin-left: auto;">
+		<h3 class="text-uppercase"
+			style="font-weight: light;color: darkslategray;display: none;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;line-height: 1.1;margin-top: 20px;margin-bottom: 10px;font-size: 24px;text-transform: uppercase;">
+			Welcome to No Pain America. Hi <%= ordered_by.first_name %> <%= ordered_by.last_name %>! Your request has been received. Contact us for any
+			questions.
+		</h3>
+		<h3 class="font-weight-light"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+			Welcome to,</h3>
+		<div class="text-center my-5"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;text-align: center;">
+			<img class="logo" src="https://nopainamerica-assets.s3.amazonaws.com/1606384996983.png" alt="Logo"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border: 0;vertical-align: middle;page-break-inside: avoid;object-fit: contain;height: 98px;width: 356px;max-width: 100%!important;">
+		</div>
+		<%
+				var status_title = null;
+				var status_message = null;
+				var status_ = Object.keys(status).sort((a, b) => Date.parse(status[b].date) - Date.parse(status[a].date))[0]
+				status_message = status[status_].message
+				switch (status_) {
+					case "checked_out":
+						status_title = "Checked Out";
+						break;
+					case "declined": 
+						status_title = "Declined"
+						break;
+					case "received":
+						status_title = "Received";
+						break;
+					case "delivered":
+						status_title = "Delivered";
+						break;
+				}
+			%>
+		<p class="text-secondary track"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;margin: 0 0 10px;margin-top: 2em;">
+			Hi  <%= ordered_by.first_name %> <%= ordered_by.last_name %>
+			<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+			<b
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-weight: 700;">
+				Here is the status of your current order!</b>
+			<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+			<section class="text-muted"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: block;color: #777;">
+				Order Tracking Number: <%= order_track_id %></section>
+
+		</p>
+		<h3 class="font-weight-light head"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 1.5em;font-size: 24px;">
+			Your Order <br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+			<small class="font-weight-light"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-size: 65%;font-weight: 400;line-height: 1;color: #777;">
+				Order Status: <%= status_title %>
+			</small>
+		</h3>
+
+		<div class="list-group"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding-left: 0;margin-bottom: 20px;">
+			<% items.forEach(item => { %>
+			<!-- <a href="#" class="list-group-item list-group-item-action flex-column align-items-start order-item"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: #fff;color: #555;position: relative;display: block;padding: 10px 15px;margin-bottom: 8px;border: 1px solid #ddd;border-top-left-radius: 4px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;border-bottom-left-radius: 4px;text-decoration: none;"> -->
+			<div class="list-group-item list-group-item-action flex-column align-items-start order-item"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: #fff;color: #555;position: relative;display: block;padding: 10px 15px;margin-bottom: 8px;border: 1px solid #ddd;border-top-left-radius: 4px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;border-bottom-left-radius: 4px;text-decoration: none;">
+				<div class="d-flex w-100 justify-content-center"
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<table class="table my-2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+						<thead
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+							<tr rowspan="2"
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+								<h3 class="my-3"
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+									<%= item.product.name %></h3>
+							</tr>
+						</thead>
+						<tbody
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+							<% 	var variations = item.variation
+								variations["Quantity"] = item.quantity
+								variations["Price"] = "$ " + (item.product.price * item.quantity).toFixed(2)
+								Object.keys(variations).forEach(variation => {
+									%>
+								<tr
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+									<td
+										style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+										<%= variation %></td>
+									<td
+										style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+										<%= variations[variation]%></td>
+								</tr>
+							<% 
+									})
+								%>
+						</tbody>
+					</table>
+				</div>
+				<!-- <small
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-size: 85%;"><%= item.product ? item.product.description : item.service.description%></small> -->
+				<!-- </a> -->
+			</div>
+			<% }) %>
+		</div>
+		<div class="payment-details"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 3em auto;">
+			<table class="table"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+				<thead
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+					<tr rowspan="2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<h3 class="my-3"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+							Payment</h3>
+					</tr>
+				</thead>
+				<tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Grand Total</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							$ <%= total_price.toFixed(2) %>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="payment-details"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 3em auto;">
+			<table class="table"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+				<thead
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+					<tr rowspan="2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<h3 class="my-3"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+							Your Response</h3>
+					</tr>
+				</thead>
+				<tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Name</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.first_name + " " + ordered_by.last_name %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Address</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.address.name + " " + ordered_by.address.city + " " + ordered_by.address.state + " " + ordered_by.address.country + " - " + ordered_by.address.zip%> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Phone</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.phone %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Date of Birth</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= new Date(ordered_by.date_of_birth).toDateString() %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							colspan="2"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Insurance Details
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Insurance Company</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.insurance_name %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Insurance Policy Number</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.insurance_policy_no %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							colspan="2"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Doctor Details
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Name
+						</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.doctor_first_name + " " + ordered_by.doctor_last_name %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Phone
+						</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.doctor_phone %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							colspan="2"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							IP and Geo Location
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							IP (v4)
+						</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.geo_ip %> 
+						</td>
+					</tr>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Geo Location
+						</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= ordered_by.geo_location %> 
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+				<thead
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+					<tr rowspan="2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<h3 class="my-3"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+							Decision Maker</h3>
+					</tr>
+				</thead>
+				<tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<% if(decision_maker.self) { %>
+						<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							colspan="2"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Self
+						</td>
+					</tr>
+					<% } else { %>
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Person Name
+							</td>
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								<%= decision_maker.person_name %> 
+							</td>
+						</tr>
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Relationship
+							</td>
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								<%= decision_maker.relationship %> 
+							</td>
+						</tr>
+						<% if(decision_maker.email) { %>
+							<tr
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+								<td
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+									Email
+								</td>
+								<td
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+									<%= decision_maker.email %> 
+								</td>
+							</tr>
+						<% } %>
+						<% if(decision_maker.phone) { %>
+							<tr
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+								<td
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+									Contact Number
+								</td>
+								<td
+									style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+									<%= decision_maker.phone %> 
+								</td>
+							</tr>
+						<% } %>						
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Allowed to Confirm Order
+							</td>
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								<%= decision_maker.confirm %> 
+							</td>
+						</tr>
+					<% } %>
+				</tbody>
+			</table>
+			<table class="table"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+				<thead
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+					<tr rowspan="2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<h3 class="my-3"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+							Form Filled By</h3>
+					</tr>
+				</thead>
+				<tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<% if(form_filled.self) { %>
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								colspan="2"
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Self
+							</td>
+						</tr>
+					<% } else { %>
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								colspan="2"
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Caretaker
+							</td>
+						</tr>
+						<tr
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								Relationship
+							</td>
+							<td
+								style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+								<%= form_filled.relationship %> 
+							</td>
+						</tr>
+					<% } %>
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							Suitable Days to Receive Package</td>
+						<td
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= form_filled.delivery %> 
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<% if(form_filled.instructions) { %>
+			<table class="table"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;border-spacing: 0;background-color: transparent;width: 100%;max-width: 100%;margin-bottom: 20px;">
+				<thead
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+					<tr rowspan="2"
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<h3 class="my-3"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;page-break-after: avoid;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;font-size: 24px;">
+							Instructions</h3>
+					</tr>
+				</thead>
+				<tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+					<tr
+						style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
+						<td
+							colspan="2"
+							style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">
+							<%= form_filled.instructions %>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<% } %>
+		</div>
+		
+		<div class="action-area-success"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: rgb(53, 189, 242);border-radius: 1em;width: 100%;height: 200px;padding: 1em 0;color: white;">
+			<h1 class="text-center font-weight-light"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-size: 36px;margin: .67em 0;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 20px;margin-bottom: 10px;text-align: center;">
+				Visit our website
+			</h1>
+			<div class="btn-wrapper"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 1em 0;display: flex;">
+				<a href="<%= redirect %>" class="btn"
+					style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: transparent;color: white;display: inline-block;margin-bottom: 0;font-weight: 400;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;background-image: none;border: 5px solid white;padding: 1em 2em;font-size: 14px;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin: auto;text-decoration: none;">Click
+					here!</a></div>
+		</div>
+		<div class="contact"
+			style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 3em auto;">
+			If you have any questions, reply to this email or contact us at <a href="mailto:welcome@commmaa.net"
+				style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: transparent;color: #337ab7;text-decoration: none;">welcome@nopainamerica.net</a>
+		</div>
+	</div>
+</body>
+
+</html>
