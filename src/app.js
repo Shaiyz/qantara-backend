@@ -73,7 +73,7 @@ app.use("*", (req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://shaiyz:bWeLVbHPNwejAulO@react-proj1.raizr.mongodb.net/qantara?retryWrites=true&w=majority",
+    "mongodb+srv://qantara:DSCr7mTPZLOZS8Kq@cluster0.l5v3t.mongodb.net/qantara?retryWrites=true&w=majority",
     {
       useUnifiedTopology: true,
       useNewUrlParser: true,
