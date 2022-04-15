@@ -72,11 +72,14 @@ app.use("*", (req, res, next) => {
  */
 
 mongoose
-  .connect(process.env.DB, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  })
+  .connect(
+    "mongodb+srv://shaiyz:bWeLVbHPNwejAulO@react-proj1.raizr.mongodb.net/qantara?retryWrites=true&w=majority",
+    {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    }
+  )
   .then(() => {
     return Promise.all([
       mongoose.connection.db.collection("orders").countDocuments(),
