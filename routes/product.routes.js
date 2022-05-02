@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 /**
  * @route		POST /product
  * @desc		Insert Product records
- * @body		{ product_name,product_category,product_discription,product_subcategory,product_images[],prodcut_price,
+ * @body		{ product_name,product_category,product_discription,product_subcategory,product_images[],product_price,
  *                  website_link,date_updated,published }
  */
 
@@ -32,7 +32,9 @@ router.get("/", (req, res, next) => {
   let populate = "";
   if ("_id" in req.query) query._id = { $in: req.query._id.split(",") };
   if ("product_name" in req.query)
-    query.product_name = { $regex: req.query.product_name, $options: "i" };
+    if ("isActive" in req.query) query.isActive = req.query.isActive;
+
+  query.product_name = { $regex: req.query.product_name, $options: "i" };
   if ("published" in req.query) query.published = true;
   if ("product_category" in req.query)
     query.product_category = req.query.product_category;

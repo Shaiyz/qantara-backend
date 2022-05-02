@@ -19,7 +19,7 @@ router.post("/login", (req, res, next) => {
       res.status(500).json({ message: "Inactive user can't login" });
     } else {
       const { password, ...rest } = user;
-      const token = jwt.sign(rest.toObject(), process.env.JWT_SECRET_KEY);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
       let response = { data: { user }, token, message: "Login success" };
       if (user.role === "customer") {
         Customer.findOne({ user: user._id })
@@ -116,6 +116,26 @@ router.post("/create/admin", (req, res, next) => {
       res.status(200).json({
         data: doc,
         message: "Admin Created Successfully",
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message });
+    });
+});
+
+/**
+ * @route   POST /user/create/superadmin
+ * @desc    Create an superadmin user
+ * @body    { user_name, email,phone, password }
+ */
+
+router.post("/create/superadmin", (req, res, next) => {
+  new User({ ...req.body, role: "superadmin" })
+    .save()
+    .then((doc) => {
+      res.status(200).json({
+        data: doc,
+        message: "Super Admin Created Successfully",
       });
     })
     .catch((error) => {

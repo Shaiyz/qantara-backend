@@ -2,15 +2,18 @@ const mongoose = require("mongoose");
 /**
  *  CREATE PRODUCT CATEGORY MODEL
  */
-const category = new mongoose.Schema({
-  category_name: {
-    type: String,
-    required: [true, "Already category exist"],
+const category = new mongoose.Schema(
+  {
+    category_name: {
+      type: String,
+      required: [true, "Already category exist"],
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("categories", category);

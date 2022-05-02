@@ -23,7 +23,7 @@ router.post("/", (req, res, next) => {
 /**
  * @route		GET /subcategory
  * @desc		Fetch Product SubCategory records
- * @query		{ _id?, catergory_name?, isActive? }
+ * @query		{ _id?, subcategory_name?, isActive? }
  */
 router.get("/", (req, res, next) => {
   let query = {};
@@ -35,10 +35,11 @@ router.get("/", (req, res, next) => {
       $options: "i",
     };
   if ("isActive" in req.query) query.isActive = req.query.isActive;
-  if ("fields" in req.query) fields = req.query.fields.replace(",", " ");
+  // if ("fields" in req.query) fields = req.query.fields.replace(",", " ");
 
   SubCategory.find(query)
-    .select(fields)
+    // .select(fields)
+    .populate("category_name")
     .exec()
     .then((doc) => {
       res.status(200).json({ data: doc });
@@ -74,7 +75,7 @@ router.put("/:subcategory_id", (req, res, next) => {
  */
 
 router.delete("/:subcategory_id", (req, res, next) => {
-  SubCategory.findByIdAndDelete(req.params.category_id)
+  SubCategory.findByIdAndDelete(req.params.subcategory_id)
     .then((doc) => {
       res
         .status(200)

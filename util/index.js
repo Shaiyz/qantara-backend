@@ -91,13 +91,13 @@ module.exports = {
     };
     const transporter = nodemailer.createTransport(credentials);
     const contacts = {
-      from: "qantara! noreply@qantara.com",
+      from: "Qantara <noreply@qantara.com>",
       to,
       attachments: attachment,
     };
     return new Promise((res, rej) => {
       ejs
-        .renderFile(path.resolve(__dirname, "../email/template.ejs"), {
+        .renderFile(path.resolve(__dirname, "../email/forget-password.ejs"), {
           email,
           password,
           message,
@@ -145,7 +145,7 @@ module.exports = {
     };
     return new Promise((res, rej) => {
       ejs
-        .renderFile(path.resolve(__dirname, "../email/forgotPassword.ejs"), {
+        .renderFile(path.resolve(__dirname, "../email/forget-password.ejs"), {
           email,
           link,
           message,

@@ -69,15 +69,14 @@ passport.use(
   "local2",
   new LocalStrategy(
     {
-      usernameField: "eksplode_code",
+      usernameField: "qantara_code",
     },
-    function (eksplode_code, password, callback) {
+    function (qantara_code, password, callback) {
       User.findOne(
         {
-          eksplode_code: eksplode_code,
+          qantara_code: qantara_code,
         },
         function (err, doc) {
-          //console.log(doc);
           if (err) {
             callback(err, null, { message: err.message });
           }
@@ -93,4 +92,3 @@ passport.use(
     }
   )
 );
-

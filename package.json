@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"start": "node 'src/index.js' dotenv_config_path=.env",
-		"dev": "nodemon 'src/index.js' dotenv_config_path=.env.test",
+		"dev": "nodemon 'src/index.js' dotenv_config_path=.env",
 		"test": "mocha 'src/test/**/*.js'"
 	},
 	"keywords": [],

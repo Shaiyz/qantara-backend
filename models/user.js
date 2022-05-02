@@ -1,48 +1,51 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { sendEmail, sendEmailTitan } = require("../util");
+const { sendEmail } = require("../util");
 const crypto = require("crypto");
 
 /**
  *  CREATE USER MODEL EITHER FOR ADMIN OR CUSTOMER
  */
-const User = new mongoose.Schema({
-  first_name: {
-    type: String,
-    required: [true, "'first_name' must be required"],
+const User = new mongoose.Schema(
+  {
+    first_name: {
+      type: String,
+      required: [true, "'first_name' must be required"],
+    },
+    middle_name: {
+      type: String,
+    },
+    last_name: {
+      type: String,
+      required: [true, "'last_name' must be required"],
+    },
+    email: {
+      type: String,
+      unique: [true, "'email' must be unique"],
+    },
+    phone: {
+      type: String,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    password: {
+      type: String,
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ["customer", "admin", "superadmin"],
+    },
+    qantara_code: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  middle_name: {
-    type: String,
-  },
-  last_name: {
-    type: String,
-    required: [true, "'last_name' must be required"],
-  },
-  email: {
-    type: String,
-    unique: [true, "'email' must be unique"],
-  },
-  phone: {
-    type: String,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-  password: {
-    type: String,
-  },
-  role: {
-    type: String,
-    required: true,
-    enum: ["customer", "admin"],
-  },
-  qantara_code: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-});
+  { timestamps: true }
+);
 User.pre("validate", function (next) {
   var first_string = "";
   var rcode = "";
@@ -50,10 +53,7 @@ User.pre("validate", function (next) {
     let name = this.first_name.charAt(0).toUpperCase();
     first_string = first_string + name;
   }
-  if (this.middle_name !== undefined) {
-    let m_name = this.middle_name[0].charAt(0).toUpperCase();
-    first_string = first_string + m_name;
-  }
+
   if (this.last_name !== undefined) {
     let l_name = this.last_name[0].charAt(0).toUpperCase();
     first_string = first_string + l_name;

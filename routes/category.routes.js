@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { Category } = require("../models");
+const { SubCategory } = require("../models");
 
 /**
  * @route		POST /category
@@ -25,7 +26,7 @@ router.post("/", (req, res, next) => {
  * @desc		Fetch Product Category records
  * @query		{ _id?, catergory_name?, isActive? }
  */
-router.get("/", (req, res, next) => {
+router.get("/", async (req, res, next) => {
   let query = {};
   let fields = "";
   if ("_id" in req.query) query._id = { $in: req.query._id.split(",") };
@@ -33,12 +34,12 @@ router.get("/", (req, res, next) => {
     query.category_name = { $regex: req.query.category_name, $options: "i" };
   if ("isActive" in req.query) query.isActive = req.query.isActive;
   if ("fields" in req.query) fields = req.query.fields.replace(",", " ");
-
+  const subcategories = await SubCategory.find();
   Category.find(query)
     .select(fields)
     .exec()
     .then((doc) => {
-      res.status(200).json({ data: doc });
+      res.status(200).json({ data: doc, subcategoies: subcategories });
     })
     .catch((error) => {
       res.status(500).json({ message: error.message });
