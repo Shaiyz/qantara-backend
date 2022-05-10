@@ -4,8 +4,8 @@ const multerS3 = require("multer-s3");
 const multer = require("multer");
 const path = require("path");
 const s3 = new aws.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: "AKIA6PDBSATZJ5AG7FKR",
+  secretAccessKey: "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",
   Bucket: "image-assets-bucket",
 });
 
@@ -38,6 +38,7 @@ const uploadFiles = multer({
 router.post("/", (req, res, next) => {
   uploadFiles(req, res, (error) => {
     if (error) {
+      console.log(error.message);
       res.status(500).json({ message: error.message });
     } else {
       if (req.files === undefined) {
