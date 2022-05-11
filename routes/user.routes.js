@@ -6,6 +6,7 @@ const { login } = require("../middlewares");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { sendEmail, getRandomChars } = require("../util");
+const checkToken = require("../middlewares/authenticate");
 
 /**
  * @route           POST /user/login
@@ -23,23 +24,23 @@ router.post("/login", (req, res, next) => {
       let response = { data: { user }, token, message: "Login success" };
       if (user.role === "customer") {
         Customer.findOne({ user: user._id })
-          .populate("user addresses.country")
+          .populate("user")
           .exec()
           .then((doc) => {
             if (!doc)
               return Promise.reject(new Error("Customer doesn't exist'"));
             response.data = {
               ...doc.toObject(),
-              addresses: doc.addresses.map((ua) => ({
-                ...ua.toObject(),
-                country: {
-                  ...ua.toObject().country,
-                  cities: undefined,
-                },
-                city: ua.country.cities.find(
-                  (uac) => uac._id + "" == ua.city + ""
-                ),
-              })),
+              // addresses: doc.addresses.map((ua) => ({
+              //   ...ua.toObject(),
+              //   country: {
+              //     ...ua.toObject().country,
+              //     cities: undefined,
+              //   },
+              //   city: ua.country.cities.find(
+              //     (uac) => uac._id + "" == ua.city + ""
+              //   ),
+              // })),
             };
             return Promise.all([
               Favorite.findOne({ customer: doc._id })
@@ -191,7 +192,7 @@ router.get("/my", login("Validating with Token"), (req, res, next) => {
       let response = { data: { user }, token, message: "Login success" };
       if (user.role === "customer") {
         return Customer.findOne({ user: user._id })
-          .populate("user addresses.country")
+          .populate("user")
           .exec()
           .then((doc) => {
             if (!doc)
@@ -244,23 +245,83 @@ router.get("/my", login("Validating with Token"), (req, res, next) => {
     });
 });
 
+router.get("/check/state", checkToken, async (req, res) => {
+  User.findOne({ _id: req.user._id })
+    .then((user) => {
+      if (!user) return Promise.reject(new Error("Token Error"));
+      const token = jwt.sign(user.toObject(), process.env.JWT_SECRET_KEY);
+      let response = { data: { user }, token, message: "Login success" };
+      if (user.role === "customer") {
+        return Customer.findOne({ user: user._id })
+          .populate("user")
+          .exec()
+          .then((doc) => {
+            if (!doc)
+              return Promise.reject(new Error("Customer doesn't exist'"));
+            response.data = {
+              ...doc.toObject(),
+              // addresses: doc.addresses.map((ua) => ({
+              //   ...ua.toObject(),
+              //   country: {
+              //     ...ua.toObject().country,
+              //     cities: undefined,
+              //   },
+              //   city: ua.country.cities.find(
+              //     (uac) => uac._id + "" == ua.city + ""
+              //   ),
+              // })),
+            };
+            return Promise.all([
+              Favorite.findOne({ customer: doc._id })
+                .populate([
+                  {
+                    path: "items",
+                    populate: [{ path: " product" }],
+                  },
+                ])
+                .exec(),
+              Cart.findOne({ customer: doc._id })
+                .populate([
+                  {
+                    path: "items",
+                    populate: [{ path: " product" }],
+                  },
+                ])
+                .exec(),
+            ]);
+          })
+          .then(([favorite, cart]) =>
+            Promise.resolve({ ...response, favorite, cart })
+          )
+          .catch((error) => Promise.reject(error));
+      } else {
+        return Promise.resolve(response);
+      }
+    })
+    .then((doc) => {
+      res.status(200).json({ ...doc });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message });
+    });
+});
+
 /**
  * @route   POST /user/create/customer
  * @desc    Create a Customer
  * @body    { name, email, password, phone, address: { name, zip, city, state, country } }
  */
 router.post("/create/customer", (req, res, next) => {
+  // first_name: req.body.first_name,
+  // last_name: req.body.last_name,
   const ud = {
-    user_name: req.body.user_name,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
     email: req.body.email,
     password: req.body.password,
     role: "customer",
   };
   const cd = {
-    phone: req.body.phone,
-    addresses: [req.body.address],
+    phone: req.body.phone || "",
+    addresses: [req.body.address || {}],
   };
   new User(ud)
     .save()
