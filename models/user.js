@@ -68,28 +68,13 @@ User.pre("validate", function (next) {
   global.USERS += 1;
   next();
 });
+
 User.pre("save", function (next) {
   if (!this.password) this.password = process.env.DEFAULT_USER_PASSWORD;
-  // if (this.email !== undefined) {
-  //   let sendMail;
-
-  //   sendMail = sendEmail(this.email, {
-  //     email: this.email,
-  //     password: this.password,
-  //     subject: "User Register",
-  //     message: "You have been added to the system.",
-  //   });
-
-  //   sendMail
-  //     .then(() => {
-  //       this.password = bcrypt.hashSync(this.password, 10);
-  //     })
-  //     .catch(next)
-  //     .finally(() => next());
-  // } else {
-  this.password = bcrypt.hashSync(this.password, 10);
+  if (this.role !== "admin") {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
   next();
-  // }
 });
 User.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
