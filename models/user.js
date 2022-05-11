@@ -10,17 +10,21 @@ const User = new mongoose.Schema(
   {
     first_name: {
       type: String,
-      required: [true, "'first_name' must be required"],
+      // required: [true, "'first_name' must be required"],
     },
     middle_name: {
       type: String,
     },
+    user_name: {
+      type: String,
+    },
     last_name: {
       type: String,
-      required: [true, "'last_name' must be required"],
+      // required: [true, "'last_name' must be required"],
     },
     email: {
       type: String,
+      lowercase: true,
       unique: [true, "'email' must be unique"],
     },
     phone: {
@@ -46,26 +50,53 @@ const User = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+const randomString = (length) => {
+  const secret = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var result = "";
+
+  for (var i = length; i > 0; --i)
+    result += secret[Math.round(Math.random() * (secret.length - 1))];
+
+  return result;
+};
+
 User.pre("validate", function (next) {
-  var first_string = "";
-  var rcode = "";
-  if (this.first_name !== undefined) {
-    let name = this.first_name.charAt(0).toUpperCase();
-    first_string = first_string + name;
+  if (this.role === "customer") {
+    this.first_name = this.email.split("@")[0].split(".")[0];
+    this.last_name = this.email.split("@")[0].split(".")[1] || "";
+    this.user_name = this.last_name
+      ? `${this.first_name} ${this.last_name}`
+      : this.first_name;
+
+    this.qantara_code = `${randomString(2)}-${randomString(4)}-${randomString(
+      2
+    )}`;
+  } else {
+    var first_string = "";
+    var rcode = "";
+    if (this.first_name !== undefined) {
+      let name = this.first_name.charAt(0).toUpperCase();
+      first_string = first_string + name;
+    }
+
+    if (this.last_name !== undefined) {
+      let l_name = this.last_name[0].charAt(0).toUpperCase();
+      first_string = first_string + l_name;
+    }
+
+    const num = global.USERS + parseInt(process.env.USER_INITIAL_POS) + "";
+    this.qantara_code = `${first_string}-${"0".repeat(
+      10 - num.length
+    )}${num}-${rcode}`;
+
+    global.USERS += 1;
   }
 
-  if (this.last_name !== undefined) {
-    let l_name = this.last_name[0].charAt(0).toUpperCase();
-    first_string = first_string + l_name;
-  }
   if (this.role !== undefined) {
     rcode = this.role[0].charAt(0).toUpperCase();
   }
-  const num = global.USERS + parseInt(process.env.USER_INITIAL_POS) + "";
-  this.qantara_code = `${first_string}-${"0".repeat(
-    10 - num.length
-  )}${num}-${rcode}`;
-  global.USERS += 1;
+
   next();
 });
 

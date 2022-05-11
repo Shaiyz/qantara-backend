@@ -72,15 +72,13 @@ app.use("*", (req, res, next) => {
  */
 
 mongoose
-  .connect(
-    "mongodb+srv://qantara:DSCr7mTPZLOZS8Kq@cluster0.l5v3t.mongodb.net/qantara?retryWrites=true&w=majority",
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-    }
-  )
+  .connect(process.env.DB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
   .then(() => {
+    global.console.log("Connection Created");
     return Promise.all([
       mongoose.connection.db.collection("orders").countDocuments(),
       mongoose.connection.db.collection("users").countDocuments(),
