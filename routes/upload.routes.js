@@ -38,7 +38,6 @@ const uploadFiles = multer({
 router.post("/", (req, res, next) => {
   uploadFiles(req, res, (error) => {
     if (error) {
-      console.log(error.message);
       res.status(500).json({ message: error.message });
     } else {
       if (req.files === undefined) {
