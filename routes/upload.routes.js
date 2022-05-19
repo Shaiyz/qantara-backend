@@ -4,9 +4,9 @@ const multerS3 = require("multer-s3");
 const multer = require("multer");
 const path = require("path");
 const s3 = new aws.S3({
-  accessKeyId: "AKIA6PDBSATZJ5AG7FKR",
-  secretAccessKey: "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",
-  Bucket: "image-assets-bucket",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  Bucket: "qantara-images",
 });
 
 /**
@@ -15,7 +15,7 @@ const s3 = new aws.S3({
 const uploadFiles = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "image-assets-bucket",
+    bucket: "qantara-images",
     acl: "public-read",
     key: function (req, file, cb) {
       cb(null, Date.now() + path.extname(file.originalname));
